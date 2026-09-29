@@ -1,0 +1,11 @@
+{
+  "graph_id":"OURSELFGRAPHS::FREQQUENCI_SPLASH::SELFGRAPH::v1",
+  "reality_id":"frekqenci-splash-portal",
+  "instance_id":"GITHUB_MAIN",
+  "version":1,
+  "status":"ADMISSION_PENDING",
+  "authority":"none",
+  "nodes":["reality","repository","agent","mcp","ourselfd","actimanirun","evidence","receipt"],
+  "edges":["reality->repository","agent->mcp","mcp->ourselfd","ourselfd->actimanirun","actimanirun->evidence","evidence->receipt"],
+  "truth_boundary":["DECLARED","OBSERVED","VERIFIED","AUTHORIZED","ACTUATABLE","EXECUTED","EFFECTIVE","WITNESSED","ADMITTED"]
+}
