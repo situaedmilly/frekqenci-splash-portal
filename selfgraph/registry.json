@@ -5,6 +5,7 @@
   "version":1,
   "status":"ADMISSION_PENDING",
   "authority":"none",
+  "activation_request":"USER_AUTHORIZED_MCP_RUNTIME_OURSELFD_GRAPH_ADMISSION",
   "nodes":["reality","repository","agent","mcp","ourselfd","actimanirun","evidence","receipt"],
   "edges":["reality->repository","agent->mcp","mcp->ourselfd","ourselfd->actimanirun","actimanirun->evidence","evidence->receipt"],
   "truth_boundary":["DECLARED","OBSERVED","VERIFIED","AUTHORIZED","ACTUATABLE","EXECUTED","EFFECTIVE","WITNESSED","ADMITTED"]
