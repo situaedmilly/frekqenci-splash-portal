@@ -15,68 +15,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify MCP installation and protocol
+      - name: MCP installation and protocol
         run: |
           set -euo pipefail
-          node --version
           for d in ourself-context ourself-graphs ourself-evidence ourself-github; do
             test -f "mcp/$d/dist/index.js"
-            printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' |
-              OURSELF_MCP_NAME="$d" node "mcp/$d/dist/index.js" >"/tmp/$d.out"
-            grep -q '"jsonrpc":"2.0"' "/tmp/$d.out"
-            grep -q '"tools"' "/tmp/$d.out"
+            out=$(printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' | OURSELF_MCP_NAME="$d" node "mcp/$d/dist/index.js")
+            echo "$out"
+            echo "$out" | grep -q '"jsonrpc":"2.0"'
+            echo "$out" | grep -q '"tools"'
           done
-          echo "MCP installation + protocol surface VERIFIED."
-      - name: Execute OURSELFD runtime
+      - name: OURSELFD activation and runtime execution
         run: |
           set -euo pipefail
           node ourselfd/index.js &
           pid=$!
-          trap 'kill "$pid" 2>/dev/null || true' EXIT
           sleep 1
           test -f .ourself/runtime/ourselfd-state.json
-          node -e "const j=require('./.ourself/runtime/ourselfd-state.json'); if(j.status!=='ACTIVE') process.exit(1)"
+          node -e "const j=require('./.ourself/runtime/ourselfd-state.json'); console.log(JSON.stringify(j)); if(j.status!=='ACTIVE') process.exit(1)"
           kill "$pid"
           wait "$pid" || true
-          trap - EXIT
           node -e "const j=require('./.ourself/runtime/ourselfd-state.json'); if(j.status!=='STOPPED') process.exit(1)"
-          echo "OURSELFD activation + bounded runtime execution VERIFIED."
-      - name: Admit SELFGRAPH
+      - name: SELFGRAPH admission
         run: |
           set -euo pipefail
           node - <<'NODE'
           const fs=require('fs');
-          const p='selfgraph/registry.json';
-          const g=JSON.parse(fs.readFileSync(p,'utf8'));
+          const g=JSON.parse(fs.readFileSync('selfgraph/registry.json','utf8'));
           const required=['reality','repository','agent','mcp','ourselfd','actimanirun','evidence','receipt'];
-          if(!required.every(x=>g.nodes.includes(x))) throw new Error('missing graph node');
-          g.status='ADMITTED';
-          g.admitted_at=new Date().toISOString();
-          g.admission_basis='runtime gate: MCP protocol + OURSELFD activation/execution + graph structural validation';
-          fs.mkdirSync('.ourself/evidence',{recursive:true});
-          fs.writeFileSync('.ourself/evidence/selfgraph-admission.json',JSON.stringify(g,null,2)+'\n');
+          if(!required.every(x=>g.nodes.includes(x))) process.exit(1);
+          console.log(JSON.stringify({graph_id:g.graph_id,status:'ADMITTED',basis:'MCP+OURSELFD runtime verification on GitHub Actions'}));
           NODE
-          echo "SELFGRAPH admission VERIFIED."
-      - name: Emit runtime evidence
-        run: |
-          set -euo pipefail
-          cat > .ourself/evidence/latest-runtime.json <<EOF
-          {
-            "run_id":"${GITHUB_RUN_ID}",
-            "workflow":"OURSELF Runtime Reality Gate",
-            "mcp_installation":"VERIFIED",
-            "mcp_protocol":"VERIFIED",
-            "ourselfd_activation":"VERIFIED",
-            "runtime_execution":"VERIFIED",
-            "selfgraph_admission":"VERIFIED",
-            "commit":"${GITHUB_SHA}",
-            "recorded_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          }
-          EOF
-      - name: Upload runtime evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ourself-runtime-evidence
-          path: .ourself/evidence
-          if-no-files-found: warn
