@@ -114,6 +114,137 @@ WITNESSED
 ADMITTED
 ```
 
+## √SELFGRAPH — Realization Intermediate Representation
+
+√SELFGRAPH is the realization-topology derivation for a target Reality Instance. It is an intermediate representation (IR), not the Reality Instance itself and not an authority mechanism.
+
+~~~text
+REALITY INSTANCE
+→ MATTER
+→ RELATIONS
+→ REQUIREMENTS
+→ CAPABILITIES
+→ TOOL INSTANCES
+→ AUTHORITY / JURISDICTION
+→ TRANSITIONS
+→ EVIDENCE CONTRACT
+→ ACTIMANIRUN
+→ EFFECT
+→ WITNESS
+→ DELTA
+→ SELFGRAPH MORPH
+~~~
+
+### Execution Frequency
+
+Every ACTIMANIRUN MUST be addressable to a SELFGRAPH version or explicitly marked as graph-unresolved. Execution frequency is the lineage produced across graph version, run, observation, evidence, delta, and successor graph; it is not a property of the graph alone.
+
+~~~text
+SELFGRAPH_vN
+→ ACTIMANIRUN
+→ OBSERVATION
+→ EFFECT / NON-EFFECT
+→ RECEIPT
+→ WITNESS
+→ DELTA
+→ SELFGRAPH_vN+1
+→ RECONTACT
+~~~
+
+### Reverse / Forward Compilation
+
+~~~text
+REALITY INSTANCE
+→ √SELFGRAPH
+→ EXECUTION PLAN
+→ ADMISSION
+→ ACTIMANIRUN
+→ REALITY'
+
+REALITY'
+→ OBSERVATION
+→ EVIDENCE
+→ DELTA
+→ SELFGRAPH'
+~~~
+
+The reverse path derives what must exist or be related for the target instance to be realizable. The forward path proposes and, only after applicable admission, actuates the resulting transitions. A graph edge never grants authority.
+
+### Graph Requirements
+
+A realization graph SHOULD represent, where relevant:
+
+- target reality and bounded instance
+- matter, nodes, edges, relations, and jurisdiction
+- required capabilities and concrete tool instances
+- algorithms, predicates, dependencies, and constraints
+- AND / OR / conditional realization logic
+- authority, admission, and actuation boundaries
+- transitions and expected post-state
+- evidence and witness contracts
+- effects, receipts, provenance, rollback, and recovery
+- unresolved, unknown, stale, or contradicted relations
+- graph version and lineage
+
+### ACTIMANIRUN Binding
+
+~~~text
+ACTIMANIRUN
+{
+  run_id
+  session_id
+  reality_id
+  instance_id
+  selfgraph_id
+  selfgraph_version
+  target_state
+  preconditions
+  transitions[]
+  required_tools[]
+  tool_instances[]
+  authority_ref
+  jurisdiction_ref
+  admission_state
+  actuation_state
+  observation_ref
+  effect_ref
+  receipt_ref
+  witness_ref
+  delta_ref
+  resulting_selfgraph_ref
+  stop_reason
+}
+~~~
+
+ACTIMANIRUN is a projection/execution record of graph-derived transitions. It does not itself confer authority, establish effect, or establish admission.
+
+### √SELFGRAPH Minimum Principle
+
+~~~text
+√SELFGRAPH(R) = minimum admissible realization graph for R
+~~~
+
+“Minimum” is relative to explicit target, constraints, required relations, and evidence obligations. If those ordering/cost criteria are not established, the graph MUST NOT claim minimality; use an explicit non-minimal or unresolved status instead.
+
+### Graph Truth Boundary
+
+~~~text
+DECLARED ≠ OBSERVED ≠ VERIFIED ≠ AUTHORIZED
+≠ ACTUATABLE ≠ EXECUTED ≠ EFFECTIVE ≠ WITNESSED ≠ ADMITTED
+~~~
+
+A SELFGRAPH can establish a realization proposal and its required evidence path. It cannot, by its own existence, establish that the target Reality Instance has materialized.
+
+### Autonomous and Session-Originated Graphs
+
+A SELFGRAPH may originate from autonomous end-goal discovery or from a GBTSELF/session input. Origin does not change its validation, authority, admission, evidence, or witness requirements.
+
+### Graph Mutation Law
+
+A SELFGRAPH version MUST change only through a scoped, evidence-backed delta or an explicitly declared graph reconstruction. Reasoning alone does not convert an observed, inferred, or proposed relation into verified substrate state.
+
+If required graph matter is missing, preserve valid state and classify the gap as UNKNOWN, UNRESOLVED, UNVERIFIED, INACCESSIBLE, STALE, or CONTRADICTED as applicable. Do not silently manufacture relations.
+
 ## Instance Doctrine
 
 An Instance is bounded, addressable, versioned state. Trace it to identity, jurisdiction, environment, source state, authority context, transition history, evidence, provenance, and current standing.
